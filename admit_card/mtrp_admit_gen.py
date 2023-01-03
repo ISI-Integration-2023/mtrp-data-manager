@@ -38,6 +38,26 @@ zone_code_map = {
     "Online": "O"
 }
 
+rep_time_map = {
+    "Junior": {
+        "Kolkata (North)": "09:30 AM",
+        "Kolkata (South)": "09:30 AM",
+        "Durgapur": "09:30 AM",
+        "Online": "10:15 AM"
+    },
+    "Senior": {
+        "Kolkata (North)": "01:30 PM",
+        "Kolkata (South)": "01:30 PM",
+        "Durgapur": "01:30 PM",
+        "Online": "02:15 PM"
+    },
+}
+
+exam_time_map = {
+    "Junior": "10:30 AM - 01:00 PM",
+    "Senior": "02:30 PM - 05:00 PM",
+}
+
 def transform_data(data : dict):
     roll_no = data["category"][0] + zone_code_map[data["zone"]] + data["reg_no"].replace("ON", '').replace("RM", '')
     return {
@@ -50,9 +70,9 @@ def transform_data(data : dict):
         "phone2": ph.format_number(ph.parse(data['alt_contact']), ph.PhoneNumberFormat.INTERNATIONAL) if data['alt_contact'] else '',
         "category": data["category"],
         "medium": data["medium"],
-        "exam_date": "01 January 1970",
-        "rep_time": "00:00",
-        "exam_time": "00:00 - 23:59",
+        "exam_date": "29 January 2023",
+        "rep_time": "Latest by " + rep_time_map[data["category"]][data["zone"]],
+        "exam_time": exam_time_map[data["category"]],
         "exam_venue": zone_venue_map[data["zone"]]
     }
 
