@@ -46,7 +46,7 @@ def run():
     data_combined["category"] = data_combined["category"].map(
         lambda e: "Junior" if "Junior" in e else "Senior")
 
-    data_combined.to_csv("csv/mtrp_contacts.csv", index=False)
+    data_combined.to_csv("csv/unpatched/mtrp_contacts.csv", index=False)
 
 if __name__ == '__main__':
     run()

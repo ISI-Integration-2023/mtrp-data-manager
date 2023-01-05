@@ -56,7 +56,7 @@ def run():
 
     data_combined.sort_values(by=["pincode", "category", "id"], ignore_index=True, inplace=True)
 
-    data_combined.to_csv("csv/mtrp_primer_details.csv", index=False)
+    data_combined.to_csv("csv/unpatched/mtrp_primer_details.csv", index=False)
 
 if __name__ == '__main__':
     run()
