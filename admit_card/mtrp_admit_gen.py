@@ -1,7 +1,8 @@
-import phonenumbers as ph
-
-from popplerqt5 import Poppler
 import csv
+import json
+
+import phonenumbers as ph
+from popplerqt5 import Poppler
 
 def generate_admit(data : dict):
     admit_base = None
@@ -58,29 +59,34 @@ exam_time_map = {
     "Senior": "02:30 PM - 05:00 PM",
 }
 
-def transform_data(data : dict):
-    roll_no = data["category"][0] + zone_code_map[data["zone"]] + data["reg_no"].replace("ON", '').replace("RM", '')
-    return {
-        "roll_no": roll_no,
-        "reg_no": data["reg_no"],
-        "name": data["name"].upper(),
-        "dob": data["dob"],
-        "email": data["email"],
-        "phone1": ph.format_number(ph.parse(data['contact']), ph.PhoneNumberFormat.INTERNATIONAL),
-        "phone2": ph.format_number(ph.parse(data['alt_contact']), ph.PhoneNumberFormat.INTERNATIONAL) if data['alt_contact'] else '',
-        "category": data["category"],
-        "medium": data["medium"],
-        "exam_date": "29 January 2023",
-        "rep_time": "Latest by " + rep_time_map[data["category"]][data["zone"]],
-        "exam_time": exam_time_map[data["category"]],
-        "exam_venue": zone_venue_map[data["zone"]]
-    }
-
 def run():
-    with open("csv/mtrp_admit_data.csv") as f:
-        reader = csv.DictReader(f)
-        for row in reader:
-            generate_admit(transform_data(row))
+    with open("raw_data/patches.json") as patch_file:
+        patches = json.load(patch_file)
+        def transform_data(data : dict):
+            internal_roll = int(data["reg_no"].replace("ON", '').replace("RM", '').replace("RP", ''))
+            if data["reg_no"].startswith("RP"): internal_roll += 1 * 10**4
+            if data["id"] in patches: internal_roll += 2 * 10**4
+            roll_no = data["category"][0] + zone_code_map[data["zone"]] + str(internal_roll)
+            return {
+                "roll_no": roll_no,
+                "reg_no": data["reg_no"],
+                "name": data["name"].upper(),
+                "dob": data["dob"],
+                "email": data["email"],
+                "phone1": ph.format_number(ph.parse(data['contact']), ph.PhoneNumberFormat.INTERNATIONAL),
+                "phone2": ph.format_number(ph.parse(data['alt_contact']), ph.PhoneNumberFormat.INTERNATIONAL) if data['alt_contact'] else '',
+                "category": data["category"],
+                "medium": data["medium"],
+                "exam_date": "29 January 2023",
+                "rep_time": "Latest by " + rep_time_map[data["category"]][data["zone"]],
+                "exam_time": exam_time_map[data["category"]],
+                "exam_venue": zone_venue_map[data["zone"]]
+            }
+
+        with open("csv/mtrp_admit_data.csv") as f:
+            reader = csv.DictReader(f)
+            for row in reader:
+                generate_admit(transform_data(row))
 
 if __name__ == '__main__':
     run()

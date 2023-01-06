@@ -8,7 +8,8 @@ def run():
         def patch_row(row):
             row["id"] = int(float(row["id"]))
             if corrections := patches.get(str(row["id"]), None):
-                row.update({k : v for k, v in corrections.items() if k in row})
+                if corrections.get("apply", True):
+                    row.update({k : v for k, v in corrections.items() if k in row})
             return row
 
         for filename in os.listdir("csv/unpatched", ):
