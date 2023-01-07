@@ -163,6 +163,7 @@ cython_debug/
 
 townscript/*.json
 townscript/*.txt
+gsheets/*.json
 admit_card/generated/*
 admit_card/templates/*
 raw_data/*

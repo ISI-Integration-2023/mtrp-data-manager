@@ -21,8 +21,14 @@ def run():
                     row1 = next(reader)
                     writer = csv.DictWriter(write_file, row1.keys())
                     writer.writeheader()
-                    writer.writerow(patch_row(row1))
-                    writer.writerows(patch_row(row) for row in reader)
+                    if row1["id"] in patches and patches[row1["id"]].get("exclude", False):
+                        pass
+                    else:
+                        writer.writerow(patch_row(row1))
+                    for row in reader:
+                        if row["id"] in patches and patches[row["id"]].get("exclude", False):
+                            continue
+                        writer.writerow(patch_row(row))
 
 if __name__ == "__main__":
     run()

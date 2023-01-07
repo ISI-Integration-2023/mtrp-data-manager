@@ -8,6 +8,8 @@ def run():
     data_online["Attendee Name"] = data_online["Attendee First Name"] + " " + \
         data_online["Attendee Last Name"]
     data_primer = pd.read_csv("raw_data/primer.csv")
+    data_printed = pd.read_csv("raw_data/printed.csv")
+    data_printed["category"] = (data_printed["Class"] > 10).map(lambda e: "Senior" if e else "Junior")
 
     map_base = {
         "Registration Id": "id",
@@ -27,6 +29,15 @@ def run():
         "Which Category Book do you want? (see Rules & Regulations*)": "category"
     }
 
+    map3 = {
+        "ID": "id",
+        "Name": "name",
+        "Email Address": "email",
+        "Mobile No.": "contact",
+        "Alternate Mobile No.": "alt_contact",
+        "category": "category"
+    }
+
     data_combined = pd.concat([
         data_offline.rename(
             columns=map1).filter(map1.values()),
@@ -35,7 +46,10 @@ def run():
             columns=map1).filter(map1.values()),
 
         data_primer.rename(columns=map2).filter(
-            map2.values())
+            map2.values()),
+
+        data_printed.rename(columns=map3).filter(
+            map3.values())
     ], ignore_index=True)
 
     data_combined["contact"] = data_combined["contact"].map(

@@ -86,6 +86,9 @@ def run():
         with open("csv/mtrp_admit_data.csv") as f:
             reader = csv.DictReader(f)
             for row in reader:
+                if not row["email"] or not row["zone"] or not row["category"] or not row["medium"]:
+                    print(f"Admit card generation failed for ID {row['id']}.")
+                    continue
                 generate_admit(transform_data(row))
 
 if __name__ == '__main__':

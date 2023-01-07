@@ -9,6 +9,7 @@ def run():
         data_online["Attendee Last Name"]
     data_primer = pd.read_csv("raw_data/primer.csv")
 
+
     s = "MTRP Problem Primer (@ 33% Discount!!)             (Rs. 200 + Rs. 70 Delivery to your Doorstep)"
 
     map_base = {
@@ -56,7 +57,7 @@ def run():
 
     data_combined.sort_values(by=["pincode", "category", "id"], ignore_index=True, inplace=True)
 
-    data_combined.to_csv("csv/unpatched/mtrp_primer_details.csv", index=False)
+    data_combined.to_csv("csv/unpatched/mtrp_primer_post_details.csv", index=False)
 
 if __name__ == '__main__':
     run()
