@@ -1,5 +1,6 @@
 import csv
 import json
+import re
 
 import phonenumbers as ph
 from popplerqt5 import Poppler
@@ -59,13 +60,19 @@ exam_time_map = {
     "Senior": "02:30 PM - 05:00 PM",
 }
 
+alpha = re.compile(r'[A-Z]+')
+
 def run():
     with open("raw_data/patches.json") as patch_file:
         patches = json.load(patch_file)
         def transform_data(data : dict):
-            internal_roll = int(data["reg_no"].replace("ON", '').replace("RM", '').replace("RP", ''))
-            if data["reg_no"].startswith("RP"): internal_roll += 1 * 10**4
-            if data["id"] in patches: internal_roll += 2 * 10**4
+            internal_roll = int(alpha.sub('', data["reg_no"]))
+            # For zone corrections, to prevent collisions
+            if data["id"] in patches:             internal_roll += 10 * 10**3
+            # Special registration sources
+            if data["reg_no"].startswith("RP"):   internal_roll += 20 * 10**3  # Printed forms
+            if data["reg_no"].startswith("RKN"):  internal_roll += 21 * 10**3  # RKMV Narendrapur bulk registration
+            if data["reg_no"].startswith("SCI"):  internal_roll += 40 * 10**3  # SciAstra
             roll_no = data["category"][0] + zone_code_map[data["zone"]] + str(internal_roll)
             return {
                 "roll_no": roll_no,

@@ -39,7 +39,7 @@ def run():
         values = result.get('values', [])
         with open("raw_data/printed.csv", "w") as f:
             writer = csv.writer(f)
-            writer.writerows(row for row in values if row[0])
+            writer.writerows(row for row in values if row[0] and row[1] and row[2])
 
 if __name__ == '__main__':
     run()
