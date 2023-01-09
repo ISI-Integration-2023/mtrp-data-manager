@@ -94,7 +94,9 @@ def run():
             reader = csv.DictReader(f)
             for row in reader:
                 if not row["email"] or not row["zone"] or not row["category"] or not row["medium"]:
-                    print(f"Admit card generation failed for ID {row['id']}.")
+                    print(f"ADMIT CARD: Generation failed for ID {row['id']} -- Insufficient info.")
+                    if row["zone"] == "Online" and not row["contact"]:
+                        print(f"ADMIT CARD: Generation failed for ID {row['id']} -- Online candidate with no phone number.")
                     continue
                 generate_admit(transform_data(row))
 

@@ -40,6 +40,7 @@ def run():
         "Preferred Exam Zone": "zone"
     }
 
+        
     data_combined = pd.concat([
         data_offline.rename(
             columns=col_map).filter(col_map.values()),

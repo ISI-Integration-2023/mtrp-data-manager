@@ -3,13 +3,19 @@ import json
 import os
 
 def run():
+    print("-"*140)
+    print("Patching errors...")
     with open("raw_data/patches.json") as patch_file:
         patches = json.load(patch_file)
         def patch_row(row):
             row["id"] = int(float(row["id"]))
             if corrections := patches.get(str(row["id"]), None):
+                print(f"PATCH: Found corrections for ID {row['id']} --", end=' ')
                 if corrections.get("apply", True):
+                    print("Applied.")
                     row.update({k : v for k, v in corrections.items() if k in row})
+                else:
+                    print("Skipped.")
             return row
 
         for filename in os.listdir("csv/unpatched", ):
@@ -22,13 +28,15 @@ def run():
                     writer = csv.DictWriter(write_file, row1.keys())
                     writer.writeheader()
                     if row1["id"] in patches and patches[row1["id"]].get("exclude", False):
-                        pass
+                        print(f"PATCH: Excluding ID {row1['id']}.")
                     else:
                         writer.writerow(patch_row(row1))
                     for row in reader:
                         if row["id"] in patches and patches[row["id"]].get("exclude", False):
+                            print(f"PATCH: Excluding ID {row['id']}.")
                             continue
                         writer.writerow(patch_row(row))
+    print("-"*140)
 
 if __name__ == "__main__":
     run()
