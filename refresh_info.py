@@ -5,6 +5,7 @@ import gsheets.get_data as get_gsheets_data
 import mtrp_contacts
 import mtrp_primer_post_details
 import admit_card.mtrp_admit_data as mtrp_admit_data
+import admit_card.mtrp_online_gmail as mtrp_online_gmail
 import admit_card.mtrp_admit_dupcheck as mtrp_admit_dupcheck
 import admit_card.mtrp_admit_gen as mtrp_admit_gen
 import admit_card.mtrp_admit_breakdown as mtrp_admit_breakdown
@@ -21,6 +22,7 @@ def main():
     mtrp_primer_post_details.run()
     mtrp_admit_data.run()
     mtrp_admit_dupcheck.run()
+    mtrp_online_gmail.run()
     patch_errors.run()
     inp = input("Regenerate all admit cards? (y/N): ").lower()
     print("-"*140)
