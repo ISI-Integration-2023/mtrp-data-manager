@@ -18,8 +18,9 @@ def generate_admit(data : dict):
             field.setReadOnly(True)
 
     admit_base.setTitle(f"MTRP 2023 Admit Card - {data['roll_no']}")
-    admit_base.setAuthor(f"MTRP 2023 Team")
-    admit_base.setCreator(f"Poppler 22.12.0 (https://poppler.freedesktop.org)")
+    admit_base.setAuthor("MTRP 2023 Team")
+    admit_base.setProducer("Poppler 22.12.0 (https://poppler.freedesktop.org)")
+    admit_base.setInfo("admit_data", json.dumps(data))
 
     converter = admit_base.pdfConverter()
     converter.setOutputFileName(f"admit_card/generated/{data['roll_no']}.pdf")
