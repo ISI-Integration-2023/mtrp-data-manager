@@ -9,11 +9,11 @@ def run():
         corrections = json.load(corrections_file)
         def patch_row(row):
             row["id"] = int(float(row["id"]))
-            if corrections := corrections.get(str(row["id"]), None):
+            if corrections_row := corrections.get(str(row["id"]), None):
                 print(f"PATCH: Found corrections for ID {row['id']} --", end=' ')
-                if corrections.get("apply", True):
+                if corrections_row.get("apply", True):
                     print("Applied.")
-                    row.update({k : v for k, v in corrections.items() if k in row})
+                    row.update({k : v for k, v in corrections_row.items() if k in row})
                 else:
                     print("Skipped.")
             return row
