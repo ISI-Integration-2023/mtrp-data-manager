@@ -5,11 +5,11 @@ import os
 def run():
     print("-"*140)
     print("Applying corrections...")
-    with open("raw_data/corrections.json") as patch_file:
-        patches = json.load(patch_file)
+    with open("raw_data/corrections.json") as corrections_file:
+        corrections = json.load(corrections_file)
         def patch_row(row):
             row["id"] = int(float(row["id"]))
-            if corrections := patches.get(str(row["id"]), None):
+            if corrections := corrections.get(str(row["id"]), None):
                 print(f"PATCH: Found corrections for ID {row['id']} --", end=' ')
                 if corrections.get("apply", True):
                     print("Applied.")
@@ -27,12 +27,12 @@ def run():
                     row1 = next(reader)
                     writer = csv.DictWriter(write_file, row1.keys())
                     writer.writeheader()
-                    if row1["id"] in patches and patches[row1["id"]].get("exclude", False):
+                    if row1["id"] in corrections and corrections[row1["id"]].get("exclude", False):
                         print(f"PATCH: Excluding ID {row1['id']}.")
                     else:
                         writer.writerow(patch_row(row1))
                     for row in reader:
-                        if row["id"] in patches and patches[row["id"]].get("exclude", False):
+                        if row["id"] in corrections and corrections[row["id"]].get("exclude", False):
                             print(f"PATCH: Excluding ID {row['id']}.")
                             continue
                         writer.writerow(patch_row(row))

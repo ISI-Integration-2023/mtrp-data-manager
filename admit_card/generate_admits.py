@@ -63,18 +63,25 @@ exam_time_map = {
 
 alpha = re.compile(r'[A-Z]+')
 
+def generate_roll_no(data : dict, corrections : dict = None):
+    if corrections is None:
+        with open("raw_data/corrections.json") as corrections_file:
+            corrections = json.load(corrections_file)
+
+    internal_counter = int(alpha.sub('', data["reg_no"]))
+    # For zone corrections, to prevent collisions
+    if data["id"] in corrections:             internal_counter += 10 * 10**3
+    # Special registration sources
+    if data["reg_no"].startswith("RP"):   internal_counter += 20 * 10**3  # Printed forms
+    if data["reg_no"].startswith("RKN"):  internal_counter += 21 * 10**3  # RKMV Narendrapur bulk registration
+    if data["reg_no"].startswith("SCI"):  internal_counter += 40 * 10**3  # SciAstra
+    return data["category"][0] + zone_code_map[data["zone"]] + str(internal_counter)
+
 def run():
-    with open("raw_data/corrections.json") as patch_file:
-        patches = json.load(patch_file)
+    with open("raw_data/corrections.json") as corrections_file:
+        corrections = json.load(corrections_file)
         def transform_data(data : dict):
-            internal_roll = int(alpha.sub('', data["reg_no"]))
-            # For zone corrections, to prevent collisions
-            if data["id"] in patches:             internal_roll += 10 * 10**3
-            # Special registration sources
-            if data["reg_no"].startswith("RP"):   internal_roll += 20 * 10**3  # Printed forms
-            if data["reg_no"].startswith("RKN"):  internal_roll += 21 * 10**3  # RKMV Narendrapur bulk registration
-            if data["reg_no"].startswith("SCI"):  internal_roll += 40 * 10**3  # SciAstra
-            roll_no = data["category"][0] + zone_code_map[data["zone"]] + str(internal_roll)
+            roll_no = generate_roll_no(data, corrections)
             return {
                 "roll_no": roll_no,
                 "reg_no": data["reg_no"],

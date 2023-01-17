@@ -24,12 +24,12 @@ def main():
     apply_corrections.run()
     duplication_check.run()
     gmail_check.run()
+    print_breakdown.run()
     inp = input("Regenerate all admit cards? (y/N): ").lower()
     print("-"*140)
     if len(inp) >= 1 and inp[0] == 'y':
         generate_admits.run()
     print("-"*140)
-    print_breakdown.run()
 
 if __name__ == '__main__':
     main()

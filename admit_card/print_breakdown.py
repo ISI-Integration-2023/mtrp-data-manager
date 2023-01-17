@@ -1,20 +1,25 @@
 import os
 
-import pandas as pd
+from admit_card.generate_admits import zone_code_map
+
+def generate_prefix_code(data):
+    return data["category"][0] + zone_code_map[data["zone"]] + data["medium"][0]
 
 def run():
-    print("ADMIT CARD: Current breakdown:")
+    data = pd.read_csv("csv/admit_data.csv").apply(generate_prefix_code, axis=0).value_counts()
+
+    print(f"ADMIT CARD: Current breakdown -- {data.sum()} candidates:")
     print("-"*140)
 
-    data = pd.Series(os.listdir("admit_card/generated")).map(lambda a: a[0:2]).value_counts()
-    print(f"Junior Online:   {data['JO']}")
-    print(f"Junior North:    {data['JN']}")
-    print(f"Junior South:    {data['JS']}")
-    print(f"Junior Durgapur: {data['JD']}")
-    print(f"Senior Online:   {data['SO']}")
-    print(f"Senior North:    {data['SN']}")
-    print(f"Senior South:    {data['SS']}")
-    print(f"Senior Durgapur: {data['SD']}")
+    print(f"Junior Online:   {data['JOE']:>3} (EN) + {data['JOB']:>3} (BN)")
+    print(f"Junior North:    {data['JNE']:>3} (EN) + {data['JNB']:>3} (BN)")
+    print(f"Junior South:    {data['JSE']:>3} (EN) + {data['JSB']:>3} (BN)")
+    print(f"Junior Durgapur: {data['JDE']:>3} (EN) + {data['JDB']:>3} (BN)")
+    
+    print(f"Senior Online:   {data['SOE']:>3} (EN) + {data['SOB']:>3} (BN)")
+    print(f"Senior North:    {data['SNE']:>3} (EN) + {data['SNB']:>3} (BN)")
+    print(f"Senior South:    {data['SSE']:>3} (EN) + {data['SSB']:>3} (BN)")
+    print(f"Senior Durgapur: {data['SDE']:>3} (EN) + {data['SDB']:>3} (BN)")
     print("-"*140)
 
 if __name__ == '__main__':
