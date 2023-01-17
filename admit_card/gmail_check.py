@@ -4,7 +4,7 @@ def run():
     print("ADMIT CARD: Checking for non-Gmail online applications...")
     print("-"*140)
 
-    df = pd.read_csv("csv/mtrp_admit_data.csv")
+    df = pd.read_csv("csv/admit_data.csv")
     df["email"] = df["email"].str.strip().str.lower()
     s = df["email"].str.endswith("@gmail.com").astype(bool)
     data = df.loc[(~s) & df["zone"].eq("Online")]     \

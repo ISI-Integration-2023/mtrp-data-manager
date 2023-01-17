@@ -4,8 +4,8 @@ import os
 
 def run():
     print("-"*140)
-    print("Patching errors...")
-    with open("raw_data/patches.json") as patch_file:
+    print("Applying corrections...")
+    with open("raw_data/corrections.json") as patch_file:
         patches = json.load(patch_file)
         def patch_row(row):
             row["id"] = int(float(row["id"]))

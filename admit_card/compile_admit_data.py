@@ -69,7 +69,7 @@ def run():
     data_combined["zone"] = data_combined["zone"].map(
         lambda e: e.replace('=', '').replace('"', '').split(",")[0], na_action='ignore')
 
-    data_combined.to_csv("csv/unpatched/mtrp_admit_data.csv", index=False)
+    data_combined.to_csv("csv/unpatched/admit_data.csv", index=False)
 
 
 if __name__ == '__main__':

@@ -64,7 +64,7 @@ exam_time_map = {
 alpha = re.compile(r'[A-Z]+')
 
 def run():
-    with open("raw_data/patches.json") as patch_file:
+    with open("raw_data/corrections.json") as patch_file:
         patches = json.load(patch_file)
         def transform_data(data : dict):
             internal_roll = int(alpha.sub('', data["reg_no"]))
@@ -91,7 +91,7 @@ def run():
                 "exam_venue": zone_venue_map[data["zone"]]
             }
 
-        with open("csv/mtrp_admit_data.csv") as f:
+        with open("csv/admit_data.csv") as f:
             reader = csv.DictReader(f)
             for row in reader:
                 if not row["email"] or not row["zone"] or not row["category"] or not row["medium"]:
