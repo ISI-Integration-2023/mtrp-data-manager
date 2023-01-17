@@ -1,0 +1,36 @@
+Dear Candidate,
+
+Greetings from the MTRP 2023 Team.
+
+Please find attached a copy of your admit card, along with a set of rules and instructions that must be followed. Kindly visit the website for the complete set of rules (Rules & Regulations Section):
+
+https://www.isical.ac.in/~integration/mtrp/
+
+Any announcements regarding the exam will be posted there.
+
+- Please note the exam date and timings.
+- Kindly send us the necessary documents on the day of the exam for verification.
+- Please check if your personal details are correct. Contact us as a reply to this email in case of any discrepancies.
+
+Note that the exam will be conducted jointly via Google Classroom and the SciAstra Portal.
+The candidates will receive a link to join the classroom soon. Any updates will be posted on the Classroom.
+
+On the day of the exam, the candidates will receive a portal link which they will have to join to give their exam.
+Note that the camera of the student must be turned on at all times.
+
+IMPORTANT DETAILS
+-----------------
+
+        Roll No.         :  {reg_no}
+        Registration No. :  {roll_no}
+        Candidate Name   :  {name}
+        Exam Date        :  {exam_date}
+        Login Time       :  {rep_time}
+        Exam Timings     :  {exam_time}
+
+Please keep your registered mobile number at hand during the examination.
+
+We wish you all the best for the exam and hope to meet you soon at the Winter Camp!
+
+Regards,
+MTRP 2023 Core Team

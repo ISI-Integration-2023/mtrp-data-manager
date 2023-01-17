@@ -3,7 +3,6 @@ import json
 import os
 
 def run():
-    print("-"*140)
     print("Applying corrections...")
     with open("raw_data/corrections.json") as corrections_file:
         corrections = json.load(corrections_file)

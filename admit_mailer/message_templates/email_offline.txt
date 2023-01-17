@@ -1,0 +1,33 @@
+Dear Candidate,
+
+Greetings from the MTRP 2023 Team.
+
+Please find attached a copy of your admit card, along with a set of rules and instructions that must be followed. Kindly visit the website for the complete set of rules (Rules & Regulations Section):
+
+https://www.isical.ac.in/~integration/mtrp/
+
+Any announcements regarding the exam will be posted there.
+
+- Please note the exam date, timings, and venue.
+- Kindly bring the necessary documents on the day of the exam for verification.
+- Please check if your personal details are correct. Contact us as a reply to this email in case of any discrepancies.
+
+Note that NO CAR PARKING privileges are present at the exam centre.
+
+IMPORTANT DETAILS
+-----------------
+
+        Roll No.         :  {reg_no}
+        Registration No. :  {roll_no}
+        Candidate Name   :  {name}
+        Exam Venue       :  {exam_venue}
+        Exam Date        :  {exam_date}
+        Reporting Time   :  {rep_time}
+        Exam Timings     :  {exam_time}
+
+Please carry a printed copy of your admit card (attached PDF) for the examination.
+
+We wish you all the best for the exam and hope to meet you soon at the Winter Camp!
+
+Regards,
+MTRP 2023 Core Team

@@ -166,5 +166,6 @@ townscript/*.txt
 gsheets/*.json
 admit_card/generated/*
 admit_card/templates/*
+admit_mailer/credentials.json
 raw_data/*
 csv/*
