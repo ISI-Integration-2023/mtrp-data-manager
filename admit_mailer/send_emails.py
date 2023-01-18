@@ -16,12 +16,12 @@ def send_email(roll_no : str):
     with smtplib.SMTP("mail.isical.ac.in", 500) as smtp:
         try:
             with open(f"admit_mailer/emails/{roll_no}.eml", "rb") as fp:
-                smtp.login(user=creds['username'], password=creds['password'])
+                #smtp.login(user=creds['username'], password=creds['password'])
                 msg = email.message_from_binary_file(fp)
                 smtp.send_message(msg)
             print(f"ADMIT MAILER: Sent admit card for {roll_no}.")
             with open("admit_mailer/sent.txt", "a") as sent:
-                sent.write(roll_no)
+                sent.write(roll_no + "\n")
         except FileNotFoundError:
             return None
 
