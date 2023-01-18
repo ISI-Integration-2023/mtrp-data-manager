@@ -9,8 +9,8 @@ import smtplib
 creds = json.load(open("admit_mailer/credentials.json"))
 
 def roll_check(roll_no : str):
-    # Block all printed forms, SciAstra, 
-    return int(roll_no[4:6]) < 20
+    # Block all printed forms, SciAstra, online forms.
+    return (int(roll_no[4:6]) < 20) and (roll_no[1] != 'O')
 
 def send_email(roll_no : str):
     with smtplib.SMTP("mail.isical.ac.in", 500) as smtp:
@@ -26,13 +26,16 @@ def send_email(roll_no : str):
             return None
 
 def run():
-    sent = open("admit_mailer/sent.txt").readlines()
+    sent = [roll_no.strip() for roll_no in open("admit_mailer/sent.txt").readlines()]
     roll_nos = (filename.replace('.eml', '') for filename in os.listdir("admit_mailer/emails") if 'eml' in filename)
     roll_nos = [roll_no for roll_no in roll_nos if roll_no not in sent and roll_check(roll_no)]
     roll_nos = roll_nos[:30]
-    print(f"ADMIT MAILER: Sending for the following roll numbers.. ({len(roll_nos)})")
+    print(f"ADMIT MAILER: Sending for the following roll numbers... ({len(roll_nos)})")
     print("-"*140)
     print(roll_nos)
     print("-"*140)
-    with Pool(10) as pool:
-        pool.map(send_email, roll_nos)
+    inp = input("Proceed? (y/N): ").lower()
+    print("-"*140)
+    if len(inp) >= 1 and inp[0] == 'y':
+        with Pool(10) as pool:
+            pool.map(send_email, roll_nos)
