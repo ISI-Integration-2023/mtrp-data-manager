@@ -5,12 +5,15 @@ import re
 import phonenumbers as ph
 from popplerqt5 import Poppler
 
-def generate_admit(data : dict):
+
+def generate_admit(data: dict):
     admit_base = None
     if data["roll_no"][1] == 'O':
-        admit_base = Poppler.Document.load("admit_card/templates/MTRP Admit Card (Online, Fillable).pdf")
+        admit_base = Poppler.Document.load(
+            "admit_card/templates/MTRP Admit Card (Online, Fillable).pdf")
     else:
-        admit_base = Poppler.Document.load("admit_card/templates/MTRP Admit Card (Offline, Fillable).pdf")
+        admit_base = Poppler.Document.load(
+            "admit_card/templates/MTRP Admit Card (Offline, Fillable).pdf")
 
     for field in admit_base.page(0).formFields():
         if field.fullyQualifiedName() in data.keys():
@@ -26,6 +29,7 @@ def generate_admit(data : dict):
     converter.setOutputFileName(f"admit_card/generated/{data['roll_no']}.pdf")
     converter.setPDFOptions(Poppler.PDFConverter.PDFOption(1))
     converter.convert()
+
 
 zone_venue_map = {
     "Kolkata (North)": "Indian Statistical Institute, Kolkata\n203, B.T. Road, Baranagar, Kolkata - 700108",
@@ -62,25 +66,33 @@ exam_time_map = {
 }
 
 alpha = re.compile(r'[A-Z]+')
+email = re.compile(open("admit_card/email_re.txt").read())
 
-def generate_roll_no(data : dict, corrections : dict = None):
+
+def generate_roll_no(data: dict, corrections: dict = None):
     if corrections is None:
         with open("raw_data/corrections.json") as corrections_file:
             corrections = json.load(corrections_file)
 
     internal_counter = int(alpha.sub('', data["reg_no"]))
     # For zone corrections, to prevent collisions
-    if data["id"] in corrections:             internal_counter += 10 * 10**3
+    if data["id"] in corrections:
+        internal_counter += 10 * 10**3
     # Special registration sources
-    if data["reg_no"].startswith("RP"):   internal_counter += 20 * 10**3  # Printed forms
-    if data["reg_no"].startswith("RKN"):  internal_counter += 21 * 10**3  # RKMV Narendrapur bulk registration
-    if data["reg_no"].startswith("SCI"):  internal_counter += 40 * 10**3  # SciAstra
+    if data["reg_no"].startswith("RP"):
+        internal_counter += 20 * 10**3  # Printed forms
+    if data["reg_no"].startswith("RKN"):
+        internal_counter += 21 * 10**3  # RKMV Narendrapur bulk registration
+    if data["reg_no"].startswith("SCI"):
+        internal_counter += 40 * 10**3  # SciAstra
     return data["category"][0] + zone_code_map[data["zone"]] + str(internal_counter)
+
 
 def run():
     with open("raw_data/corrections.json") as corrections_file:
         corrections = json.load(corrections_file)
-        def transform_data(data : dict):
+
+        def transform_data(data: dict):
             roll_no = generate_roll_no(data, corrections)
             return {
                 "roll_no": roll_no,
@@ -102,9 +114,16 @@ def run():
             reader = csv.DictReader(f)
             for row in reader:
                 if not row["email"] or not row["zone"] or not row["category"] or not row["medium"]:
-                    print(f"ADMIT CARD: Generation failed for ID {row['id']} -- Insufficient info.")
-                    if row["zone"] == "Online" and not row["contact"]:
-                        print(f"ADMIT CARD: Generation failed for ID {row['id']} -- Online candidate with no phone number.")
+                    print(
+                        f"ADMIT CARD: Generation failed for ID {row['id']} -- Insufficient info.")
+                    continue
+                if not email.match(row["email"].lower()):
+                    print(
+                        f"ADMIT CARD: Generation failed for ID {row['id']} -- Invalid email: {row['email']}")
+                    continue
+                if row["zone"] == "Online" and not row["contact"]:
+                    print(
+                        f"ADMIT CARD: Generation failed for ID {row['id']} -- Online candidate with no phone number.")
                     continue
                 generate_admit(transform_data(row))
 

@@ -25,7 +25,7 @@ IMPORTANT DETAILS
         Reporting Time   :  {rep_time}
         Exam Timings     :  {exam_time}
 
-Please carry a printed copy of your admit card (attached PDF) for the examination.
+Please carry a printed copy of your admit card (attached PDF) for the examination. One should be with the candidate, and one with the guardian.
 
 We wish you all the best for the exam and hope to meet you soon at the Winter Camp!
 

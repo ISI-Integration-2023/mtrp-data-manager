@@ -8,6 +8,7 @@ import admit_card.compile_admit_data as compile_admit_data
 import admit_card.gmail_check as gmail_check
 import admit_card.duplication_check as duplication_check
 import admit_card.generate_admits as generate_admits
+import admit_mailer.generate_emails as generate_emails
 import admit_card.print_breakdown as print_breakdown
 import apply_corrections
 
@@ -29,6 +30,11 @@ def main():
     print("-"*140)
     if len(inp) >= 1 and inp[0] == 'y':
         generate_admits.run()
+    print("-"*140)
+    inp = input("Regenerate all draft emails? (y/N): ").lower()
+    print("-"*140)
+    if len(inp) >= 1 and inp[0] == 'y':
+        generate_emails.run()
     print("-"*140)
 
 if __name__ == '__main__':
