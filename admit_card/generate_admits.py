@@ -2,6 +2,9 @@ import csv
 import json
 import re
 
+import os
+import glob
+
 import phonenumbers as ph
 from popplerqt5 import Poppler
 
@@ -95,6 +98,7 @@ def run():
         def transform_data(data: dict):
             roll_no = generate_roll_no(data, corrections)
             return {
+                "id": data["id"],
                 "roll_no": roll_no,
                 "reg_no": data["reg_no"],
                 "name": data["name"].upper(),
@@ -109,6 +113,14 @@ def run():
                 "exam_time": exam_time_map[data["category"]],
                 "exam_venue": zone_venue_map[data["zone"]]
             }
+
+        sent = [roll_no.strip() for roll_no in open("admit_mailer/sent.txt").readlines()]
+
+        print(f"ADMIT CARD: Deleting old admit cards...")
+        files = glob.glob("admit_card/generated/*.pdf")
+        for f in files:
+            os.remove(f)
+        print(f"ADMIT CARD: Deleted old admit cards!")
 
         with open("csv/admit_data.csv") as f:
             reader = csv.DictReader(f)
@@ -125,7 +137,10 @@ def run():
                     print(
                         f"ADMIT CARD: Generation failed for ID {row['id']} -- Online candidate with no phone number.")
                     continue
-                generate_admit(transform_data(row))
+                row = transform_data(row)
+                if row["roll_no"] in sent:
+                    continue
+                generate_admit(row)
 
 if __name__ == '__main__':
     run()

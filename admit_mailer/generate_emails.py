@@ -1,5 +1,6 @@
 import json
 import os
+import glob
 import subprocess
 
 from multiprocessing import Pool
@@ -62,6 +63,14 @@ def make_email(roll_no: str):
         fp.write(msg.as_bytes(policy=SMTPUTF8))
 
 def run():
+    print(f"ADMIT CARD: Deleting old draft emails...")
+    files = glob.glob("admit_mailer/emails/*.eml")
+    print(f"ADMIT CARD: Deleted old draft emails!")
+    for f in files:
+        os.remove(f)
+    sent = [roll_no.strip() for roll_no in open("admit_mailer/sent.txt").readlines()]
+    sent = [roll_no.strip() for roll_no in open("admit_mailer/revoked.txt").readlines()]
     roll_nos = (filename.replace('.pdf', '') for filename in os.listdir("admit_card/generated") if 'pdf' in filename)
+    roll_nos = [roll_no for roll_no in roll_nos if (roll_no not in sent) and (roll_no not in revoked)]
     with Pool(10) as pool:
         pool.map(make_email, roll_nos)
