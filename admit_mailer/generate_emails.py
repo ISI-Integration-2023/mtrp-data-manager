@@ -69,7 +69,7 @@ def run():
     for f in files:
         os.remove(f)
     sent = [roll_no.strip() for roll_no in open("admit_mailer/sent.txt").readlines()]
-    sent = [roll_no.strip() for roll_no in open("admit_mailer/revoked.txt").readlines()]
+    revoked = [roll_no.strip() for roll_no in open("admit_mailer/revoked.txt").readlines()]
     roll_nos = (filename.replace('.pdf', '') for filename in os.listdir("admit_card/generated") if 'pdf' in filename)
     roll_nos = [roll_no for roll_no in roll_nos if (roll_no not in sent) and (roll_no not in revoked)]
     with Pool(10) as pool:
