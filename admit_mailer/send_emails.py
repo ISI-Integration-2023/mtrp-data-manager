@@ -9,8 +9,8 @@ import smtplib
 creds = json.load(open("admit_mailer/credentials.json"))
 
 def roll_check(roll_no : str):
-    # Block all printed forms, SciAstra.
-    return (int(roll_no[4:6]) < 20)
+    # Block all RKMV Narendrapur admits.
+    return (int(roll_no[5]) != 1)
 
 def send_email(roll_no : str):
     with smtplib.SMTP("mail.isical.ac.in", 500) as smtp:
