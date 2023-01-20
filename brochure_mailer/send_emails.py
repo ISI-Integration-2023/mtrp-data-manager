@@ -18,11 +18,11 @@ def send_email(name : str, email_id : str):
         with open("brochure_mailer/sent.txt", "a") as sent:
             sent.write(email_id + "\n")
 
-def run():
+def run(N=50):
     sent = [email.strip() for email in open("brochure_mailer/sent.txt").readlines()]
     with open("brochure_mailer/schools.csv") as f:
         reader = csv.DictReader(f)
-        data = [(row["name"], row["email"]) for row in reader if row["name"] and row["email"] and row["email"] not in sent][:50]
+        data = [(row["name"], row["email"]) for row in reader if row["name"] and row["email"] and row["email"] not in sent][:N]
         print(f"BROCHURE MAILER: Sending for the following adresses... ({len(data)})")
         print("-"*140)
         for name, email in data:
