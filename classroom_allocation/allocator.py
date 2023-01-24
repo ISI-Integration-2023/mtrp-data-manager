@@ -1,40 +1,27 @@
-import csv
-import random
+import pandas as pd
+import numpy as np
 import re
 
 email_re = re.compile(open("admit_card/email_re.txt").read())
 
-classrooms_cat_map = {
-    "Junior": 8,
-    "Senior": 3
-}
+JUNIOR_CLASSROOMS = 8
+SENIOR_CLASSROOMS = 6
 
 def allocate():
-    data = {}
-    try:
-        with open("classroom_allocation/allocation.csv") as f:
-            reader = csv.DictReader(f)
-            for row in reader:
-                data[row["email"]] = row["classroom"]
-    except FileNotFoundError:
-        pass
-
-    with open("csv/admit_data.csv") as f:
-        reader = csv.DictReader(f)
-        for row in reader:
-            if row["zone"] != "Online":
-                continue
-            if not row["email"] or not row["zone"] or not row["category"] or not row["medium"] or not row["contact"]:
-                continue
-            row["email"] = row["email"].lower()
-            if not email_re.match(row["email"]) or not row["email"].endswith("@gmail.com"):
-                continue
-            if row["email"] not in data:
-                data[row["email"]] = row["category"][0] + str(1 + random.choice(range(classrooms_cat_map[row["category"]])))
-
-    with open("classroom_allocation/allocation.csv", "w") as f:
-        writer = csv.DictWriter(f, ["email", "classroom"])
-        writer.writeheader()
-        writer.writerows(
-            { "email": k, "classroom": v } for k, v in data.items()
-        )
+    df = pd.read_csv("csv/admit_data.csv")
+    existing = pd.read_csv("classroom_allocation/allocation.csv")
+    e_list = existing["email"].to_list()
+    df["zone"] = df["zone"].map(lambda e: e if e == "Online" else None)
+    df["email"] = df["email"].str.lower().map(lambda e: e if email_re.match(e) and e.endswith("@gmail.com") else None)
+    df["email"] = df["email"][~ df["email"].isin(e_list)]
+    df = df.dropna(subset=["email", "zone", "category", "medium", "contact"]).sample(frac=1)
+    df_junior = df[df["category"] == "Junior"]
+    df_senior = df[df["category"] == "Senior"]
+    dfs_junior = np.array_split(df_junior, JUNIOR_CLASSROOMS)
+    dfs_senior = np.array_split(df_senior, SENIOR_CLASSROOMS)
+    for i, j in enumerate(dfs_junior):
+        j["classroom"] = f"J{(i+1):02}"
+    for i, s in enumerate(dfs_senior):
+        s["classroom"] = f"S{(i+1):02}"
+    df = pd.concat([existing] + dfs_junior + dfs_senior, ignore_index=True).filter(["email", "classroom"])
+    df.to_csv("classroom_allocation/allocation.csv", index=False)
