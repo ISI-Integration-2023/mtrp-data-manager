@@ -137,6 +137,10 @@ def run():
                     print(
                         f"ADMIT CARD: Generation failed for ID {row['id']} -- Online candidate with no phone number.")
                     continue
+                if row["zone"] == "Online" and not row["email"].endswith("@gmail.com"):
+                    print(
+                        f"ADMIT CARD: Generation failed for ID {row['id']} -- Online candidate with no Gmail address.")
+                    continue
                 row = transform_data(row)
                 if row["roll_no"] in sent:
                     continue

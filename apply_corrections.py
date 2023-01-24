@@ -7,8 +7,7 @@ def run():
     with open("raw_data/corrections.json") as corrections_file:
         corrections = json.load(corrections_file)
         def patch_row(row):
-            row["id"] = int(float(row["id"]))
-            if corrections_row := corrections.get(str(row["id"]), None):
+            if corrections_row := corrections.get(row["id"], None):
                 print(f"PATCH: Found corrections for ID {row['id']} --", end=' ')
                 if corrections_row.get("apply", True):
                     print("Applied.")

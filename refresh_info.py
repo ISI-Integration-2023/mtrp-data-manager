@@ -2,8 +2,6 @@ import datetime
 
 import townscript.get_data as get_townscript_data
 import gsheets.get_data as get_gsheets_data
-import compile_contacts
-import compile_primer_post_details
 import admit_card.compile_admit_data as compile_admit_data
 import admit_card.gmail_check as gmail_check
 import admit_card.duplication_check as duplication_check
@@ -21,8 +19,6 @@ def main():
     get_townscript_data.run()
     get_gsheets_data.run()
     print("FETCH: Downloaded data!")
-    compile_contacts.run()
-    compile_primer_post_details.run()
     compile_admit_data.run()
     apply_corrections.run()
     duplication_check.run()
