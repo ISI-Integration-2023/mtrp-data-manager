@@ -4,8 +4,8 @@ import re
 
 email_re = re.compile(open("admit_card/email_re.txt").read())
 
-JUNIOR_CLASSROOMS = 8
-SENIOR_CLASSROOMS = 6
+JUNIOR_CLASSROOMS = 10
+SENIOR_CLASSROOMS = 4
 
 def allocate():
     df = pd.read_csv("csv/admit_data.csv")
@@ -23,5 +23,5 @@ def allocate():
         j["classroom"] = f"J{(i+1):02}"
     for i, s in enumerate(dfs_senior):
         s["classroom"] = f"S{(i+1):02}"
-    df = pd.concat([existing] + dfs_junior + dfs_senior, ignore_index=True).filter(["email", "classroom"])
+    df = pd.concat([existing] + dfs_junior + dfs_senior, ignore_index=True).filter(["name", "email", "contact", "classroom"])
     df.to_csv("classroom_allocation/allocation.csv", index=False)
