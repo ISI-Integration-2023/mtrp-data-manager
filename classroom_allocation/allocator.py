@@ -8,9 +8,11 @@ JUNIOR_CLASSROOMS = 10
 SENIOR_CLASSROOMS = 4
 
 def allocate():
-    df = pd.read_csv("csv/admit_data.csv")
-    df["email"] = df["email"].str.lower()
-    existing = pd.read_csv("classroom_allocation/allocation.csv")
+    df = pd.read_csv("csv/admit_data.csv", dtype=str)
+    df["email"] = df["email"].str.lower().str.strip()
+    existing = pd.read_csv("classroom_allocation/allocation.csv", dtype=str)
+    existing["email"] = existing["email"].str.lower().str.strip()
+    existing.drop_duplicates(subset=["reg_no", "name", "email"], inplace=True, ignore_index=True)
     e_list = existing["email"].to_list()
     existing = existing.filter(["email", "classroom"]).join(df.set_index("email"), on="email")
     df["zone"] = df["zone"].map(lambda e: e if e == "Online" else None)
@@ -26,4 +28,5 @@ def allocate():
     for i, s in enumerate(dfs_senior):
         s["classroom"] = f"S{(i+1):02}"
     df = pd.concat([existing] + dfs_junior + dfs_senior, ignore_index=True).filter(["reg_no", "name", "email", "contact", "classroom", "medium"])
+    df.drop_duplicates(subset=["reg_no", "name", "email"], inplace=True, ignore_index=True)
     df.to_csv("classroom_allocation/allocation.csv", index=False)

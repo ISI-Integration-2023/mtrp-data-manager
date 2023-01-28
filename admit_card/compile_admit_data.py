@@ -102,6 +102,7 @@ def run():
 
     data_combined["id"] = data_combined["id"].map(lambda e: str(e).replace('.0', ''))
 
+    data_combined.drop_duplicates(inplace=True, ignore_index=True)
     data_combined.to_csv("csv/unpatched/admit_data.csv", index=False)
 
 
