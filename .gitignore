@@ -163,6 +163,7 @@ cython_debug/
 
 *credentials.json
 *.csv
+*.xlsx
 *token*
 gsheets/*.json
 brochure_mailer/sent.txt

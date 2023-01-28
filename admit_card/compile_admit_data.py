@@ -87,9 +87,9 @@ def run():
         lambda e: '-'.join(reversed(e.replace('=', '').replace('"', '').split('-'))), na_action='ignore')
 
     data_combined["contact"] = data_combined["contact"].map(
-        lambda e: e.replace('"', '').replace('=', ''), na_action='ignore')
+        lambda e: e.replace('"', '').replace('=', '').replace(' ', ''), na_action='ignore')
     data_combined["alt_contact"] = data_combined["alt_contact"].map(
-        lambda e: e.replace('"', '').replace('=', ''), na_action='ignore')
+        lambda e: e.replace('"', '').replace('=', '').replace(' ', ''), na_action='ignore')
 
     data_combined["category"] = data_combined["category"].map(
         lambda e: "Junior" if "Junior" in e else "Senior", na_action='ignore')

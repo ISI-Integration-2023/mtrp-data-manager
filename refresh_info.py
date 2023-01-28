@@ -8,6 +8,7 @@ import admit_card.duplication_check as duplication_check
 import admit_card.generate_admits as generate_admits
 import admit_mailer.generate_emails as generate_emails
 import admit_card.print_breakdown as print_breakdown
+import attendance_sheets.make_attendance_sheet as make_attendance_sheet
 import apply_corrections
 
 def main():
@@ -24,6 +25,7 @@ def main():
     duplication_check.run()
     gmail_check.run()
     print_breakdown.run()
+    make_attendance_sheet.run()
     inp = input("Regenerate unsent admit cards? (y/N): ").lower()
     print("-"*140)
     if len(inp) >= 1 and inp[0] == 'y':
